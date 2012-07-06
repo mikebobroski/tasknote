@@ -1,0 +1,96 @@
+#!/bin/bash
+
+###############################################################################
+# tasknote - associate note file with individual tasks in taskwarrior
+# 
+# Copyright 2011, Alan Bowen, bowen@tcnj.edu.
+# All rights reserved.
+#
+# based on taskopen - file based notes with taskwarrior
+#
+# Copyright 2010, Johannes Schlatow.
+# All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the
+#
+#     Free Software Foundation, Inc.,
+#     51 Franklin Street, Fifth Floor,
+#     Boston, MA
+#     02110-1301
+#     USA
+#
+###############################################################################
+
+# Updated 2012, Michael Bobroski <bobroski@gmail.com>
+# 	- Updated to work with Taskwarrior 2.0
+# 	- View Note Feature
+#	- Allow relative path for FOLDER
+
+EDITOR=vim
+TASKBIN=task
+VIEWER=cat
+
+# FOLDER to store notes in. Must already exist.
+# If you sync tasks, FOLDER should be a location that syncs and is available to
+# other computers, i.e. ~/dropbox/tasknotes
+FOLDER="~/Dropbox/.task/tasknotes/"
+
+# Preferred extension for tasknotes
+EXT=".txt"
+
+# Message that gets annotated to the task to indicate that notes exist
+NOTEMSG="See Notes File"
+
+# Display usage if task number not supplied on cli
+if [ $# -lt 1 -o $# -gt 2 ]; then
+	echo "Usage:"
+   	echo "  New/Edit note: $0 <id>"
+	echo "  View note:     $0 <id> v"
+	exit 1
+fi
+
+#find UUID from given task
+uuid=`$TASKBIN $1 uuids | grep -o "[-a-f0-9]*\$"`
+
+# build full path & file name to store notes in
+folder=`echo $FOLDER | sed "s|^~|$HOME|"`
+file="$folder$uuid$EXT"
+
+# determine if notes file already exists
+fileexists=0
+if [ -f $file ]; then
+  fileexists=1
+fi
+
+# Display note if requested and exit
+if [ $# -gt 1 ]; then
+	if [ $fileexists = 1 ]; then
+		$SHELL -c "$VIEWER $file"
+	else
+		echo "File not found"
+	fi
+	exit 1
+fi
+
+#create/edit $file with editor
+$SHELL -c "$EDITOR $file"
+
+# if note was just created, add NOTEMSG as annotation to task
+if [ $fileexists = 0 ]; then
+  if [ -f $file ]; then
+    $SHELL -c "$TASKBIN $* annotate '$NOTEMSG'"
+ fi
+fi
+
+exit 0
