@@ -9,11 +9,11 @@ The script automatically opens your text editor (defaults to vim) and allows you
 Usage
 -----
 
-**Create/Edit Note**
+**Create/Edit Note:**
 
 `Tasknote <task_id>`
 
-**View Note**
+**View Note:**
 	
 `Tasknote <task_id> v`
 
