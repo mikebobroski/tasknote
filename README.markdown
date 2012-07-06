@@ -11,11 +11,11 @@ Usage
 
 **Create/Edit Note:**
 
-`Tasknote <task_id>`
+`tasknote <task_id>`
 
 **View Note:**
 	
-`Tasknote <task_id> v`
+`tasknote <task_id> v`
 
 Actually, you can type anything after <task_id> that comes to mind: v, view, show, list, cat etc. I left it open since no other features are planned.
 
