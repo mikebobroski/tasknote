@@ -44,7 +44,7 @@ VIEWER=cat
 # FOLDER to store notes in. Must already exist.
 # If you sync tasks, FOLDER should be a location that syncs and is available to
 # other computers, i.e. ~/dropbox/tasknotes
-FOLDER="~/Dropbox/tasks/tasknotes/"
+FOLDER="~/Dropbox/tasks/notes/"
 
 # Preferred extension for tasknotes
 EXT=".txt"
@@ -86,11 +86,15 @@ fi
 #create/edit $file with editor
 $SHELL -c "$EDITOR $file"
 
-# if note was just created, add NOTEMSG as annotation to task
-if [ $fileexists = 0 ]; then
-  if [ -f $file ]; then
-    $SHELL -c "$TASKBIN $* annotate '$NOTEMSG'"
- fi
+# Create a note message representing the first line of
+# the edited note file.
+if [ -f $file ]; then
+  NOTEMSG="[tasknote] `head -1 $file`"
+  # remove any previous annotation - we want only a single
+  # tasknote annotation. Detection works through the
+  # [tasknote] annotation prefix
+  $SHELL -c "$TASKBIN $* denotate \"[tasknote]\""
+  $SHELL -c "$TASKBIN $* annotate '$NOTEMSG'"
 fi
 
 exit 0
