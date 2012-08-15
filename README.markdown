@@ -1,12 +1,13 @@
 tasknote
 ========
 
-The tasknote script was originally written by Alan Bowen and updated by Michael Bobroski to work with taskwarrior 2. He also added the ability to quickly view a note instead of opening it up in an editor.
+The script automatically opens your text editor (defaults to vim) and allows you to edit notes. Upon saving notes, an annotation is added to the task to alert you to the fact that notes exist for that task. The annotation captures the first line of the note file and is updated with every modification to the file.
 
-I modified the way tasknotes are presented as annotations: after modifying a note, the note file's first line is attached to the task as an annotation. Previous [tasknote] annotations are removed.
-
-The script automatically opens your text editor (defaults to vim) and allows you to edit notes. Upon saving notes, an annotation is added to the task to alert you to the fact that notes exist for that task.
-
+History
+-------
+* Original implementation: Alan Bowen
+* Update to taskwarrior 2.0: Michael Bobroski
+* Context-aware annotations: Bjoern Doebel
 
 Usage
 -----
