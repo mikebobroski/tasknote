@@ -44,7 +44,7 @@ VIEWER=cat
 # FOLDER to store notes in. Must already exist.
 # If you sync tasks, FOLDER should be a location that syncs and is available to
 # other computers, i.e. ~/dropbox/tasknotes
-FOLDER="~/Dropbox/.task/tasknotes/"
+FOLDER="~/Dropbox/tasks/tasknotes/"
 
 # Preferred extension for tasknotes
 EXT=".txt"
@@ -61,7 +61,7 @@ if [ $# -lt 1 -o $# -gt 2 ]; then
 fi
 
 #find UUID from given task
-uuid=`$TASKBIN $1 uuids | grep -o "[-a-f0-9]*\$"`
+uuid=`$TASKBIN $1 uuids`
 
 # build full path & file name to store notes in
 folder=`echo $FOLDER | sed "s|^~|$HOME|"`
