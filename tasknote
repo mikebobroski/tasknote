@@ -46,6 +46,20 @@ VIEWER=cat
 # other computers, i.e. ~/dropbox/tasknotes
 FOLDER="~/Dropbox/tasks/notes/"
 
+# Check for existence of $FOLDER
+if [ ! -d $FOLDER ]; then
+	echo    "Notes folder '$FOLDER' does not exist."
+	echo -n "Shall I create it (y/n)? "
+	read answer
+	if [ $answer == "y" ]; then
+	  echo "Creating '$FOLDER'."
+	  mkdir -p $FOLDER;
+	else
+	  echo "Did NOT create $FOLDER. Exiting."
+	  exit 1;
+	fi
+fi
+
 # Preferred extension for tasknotes
 EXT=".txt"
 
