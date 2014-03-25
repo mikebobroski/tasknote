@@ -8,6 +8,7 @@ History
 * Original implementation: Alan Bowen
 * Update to taskwarrior 2.0: Michael Bobroski
 * Context-aware annotations: Bjoern Doebel
+* Spaces or other 'special' characters can now be used in the name of notes directory: @AlexCzar
 
 Usage
 -----
@@ -21,6 +22,8 @@ Usage
 `tasknote <task_id> v`
 
 Actually, you can type anything after <task_id> that comes to mind: v, view, show, list, cat etc. I left it open since no other features are planned.
+
+Note: This behaviour might change soon (d[elete] will be implemented in addition to v[iew])
 
 Configuration
 -------------
