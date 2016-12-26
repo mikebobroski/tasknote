@@ -47,15 +47,15 @@ VIEWER=cat
 FOLDER="~/Dropbox/tasks/notes/"
 
 # Check for existence of $FOLDER
-if [ ! -d $FOLDER ]; then
+if [ ! -d "$FOLDER" ]; then
 	echo    "Notes folder '$FOLDER' does not exist."
 	echo -n "Shall I create it (y/n)? "
 	read answer
 	if [ $answer == "y" ]; then
 	  echo "Creating '$FOLDER'."
-	  mkdir -p $FOLDER
+	  mkdir -p "$FOLDER"
 	else
-	  echo "Did NOT create $FOLDER. Exiting."
+	  echo "Did NOT create '$FOLDER'. Exiting."
 	  exit 1
 	fi
 fi
@@ -78,19 +78,19 @@ fi
 uuid=`$TASKBIN $1 uuids`
 
 # build full path & file name to store notes in
-folder=`echo $FOLDER | sed "s|^~|$HOME|"`
+folder=`echo "$FOLDER" | sed "s|^~|$HOME|"`
 file="$folder$uuid$EXT"
 
 # determine if notes file already exists
 fileexists=0
-if [ -f $file ]; then
+if [ -f "$file" ]; then
   fileexists=1
 fi
 
 # Display note if requested and exit
 if [ $# -gt 1 ]; then
 	if [ $fileexists = 1 ]; then
-		$SHELL -c "$VIEWER $file"
+		$SHELL -c "$VIEWER \"$file\""
 	else
 		echo "File not found"
 	fi
@@ -98,12 +98,12 @@ if [ $# -gt 1 ]; then
 fi
 
 #create/edit $file with editor
-$SHELL -c "$EDITOR $file" || exit 1
+$SHELL -c "$EDITOR \"$file\"" || exit 1
 
 # Create a note message representing the first line of
 # the edited note file.
-if [ -f $file ]; then
-  NOTEMSG="[tasknote] `head -1 $file`"
+if [ -f "$file" ]; then
+  NOTEMSG="[tasknote] "`head -1 "$file"`
   # remove any previous annotation - we want only a single
   # tasknote annotation. Detection works through the
   # [tasknote] annotation prefix
