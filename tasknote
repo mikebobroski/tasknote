@@ -44,24 +44,24 @@ VIEWER=cat
 # FOLDER to store notes in. Must already exist.
 # If you sync tasks, FOLDER should be a location that syncs and is available to
 # other computers, i.e. ~/dropbox/tasknotes
-FOLDER="~/Dropbox/tasks/notes/"
+FOLDER=`task _show | awk -F= '/data\.location/ {print $2}'`/notes
 
 # Check for existence of $FOLDER
-if [ ! -d $FOLDER ]; then
+if [ ! -d "$FOLDER" ]; then
 	echo    "Notes folder '$FOLDER' does not exist."
 	echo -n "Shall I create it (y/n)? "
 	read answer
 	if [ $answer == "y" ]; then
 	  echo "Creating '$FOLDER'."
-	  mkdir -p $FOLDER;
+	  mkdir -p "$FOLDER"
 	else
-	  echo "Did NOT create $FOLDER. Exiting."
-	  exit 1;
+	  echo "Did NOT create '$FOLDER'. Exiting."
+	  exit 1
 	fi
 fi
 
 # Preferred extension for tasknotes
-EXT=".txt"
+EXT="txt"
 
 # Message that gets annotated to the task to indicate that notes exist
 NOTEMSG="See Notes File"
@@ -78,19 +78,19 @@ fi
 uuid=`$TASKBIN $1 uuids`
 
 # build full path & file name to store notes in
-folder=`echo $FOLDER | sed "s|^~|$HOME|"`
-file="$folder$uuid$EXT"
+folder=`echo "$FOLDER" | sed "s|^~|$HOME|"`
+file="$folder/$uuid.$EXT"
 
 # determine if notes file already exists
 fileexists=0
-if [ -f $file ]; then
+if [ -f "$file" ]; then
   fileexists=1
 fi
 
 # Display note if requested and exit
 if [ $# -gt 1 ]; then
 	if [ $fileexists = 1 ]; then
-		$SHELL -c "$VIEWER $file"
+		$SHELL -c "$VIEWER \"$file\""
 	else
 		echo "File not found"
 	fi
@@ -98,17 +98,18 @@ if [ $# -gt 1 ]; then
 fi
 
 #create/edit $file with editor
-$SHELL -c "$EDITOR $file"
+$SHELL -c "$EDITOR \"$file\"" || exit 1
 
 # Create a note message representing the first line of
 # the edited note file.
-if [ -f $file ]; then
-  NOTEMSG="[tasknote] `head -1 $file`"
+if [ -f "$file" ]; then
+  ESCAPED=`sed -e "s/'/\\\'/g" "$file" | head -1`
+  NOTEMSG="[tasknote] $ESCAPED"
   # remove any previous annotation - we want only a single
   # tasknote annotation. Detection works through the
   # [tasknote] annotation prefix
   $SHELL -c "$TASKBIN $* denotate \"[tasknote]\""
-  $SHELL -c "$TASKBIN $* annotate '$NOTEMSG'"
+  $SHELL -c "$TASKBIN $* annotate \"$NOTEMSG\""
 fi
 
 exit 0
