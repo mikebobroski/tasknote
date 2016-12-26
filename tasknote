@@ -98,7 +98,7 @@ if [ $# -gt 1 ]; then
 fi
 
 #create/edit $file with editor
-$SHELL -c "$EDITOR $file"
+$SHELL -c "$EDITOR $file" || exit 1
 
 # Create a note message representing the first line of
 # the edited note file.
