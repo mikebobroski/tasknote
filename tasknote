@@ -53,10 +53,10 @@ if [ ! -d $FOLDER ]; then
 	read answer
 	if [ $answer == "y" ]; then
 	  echo "Creating '$FOLDER'."
-	  mkdir -p $FOLDER;
+	  mkdir -p $FOLDER
 	else
 	  echo "Did NOT create $FOLDER. Exiting."
-	  exit 1;
+	  exit 1
 	fi
 fi
 
