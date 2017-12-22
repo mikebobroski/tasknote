@@ -102,13 +102,15 @@ $SHELL -c "$EDITOR $file"
 
 # Create a note message representing the first line of
 # the edited note file.
-if [ -f $file ]; then
+if [ -s $file ]; then
   NOTEMSG="[tasknote] `head -1 $file`"
   # remove any previous annotation - we want only a single
   # tasknote annotation. Detection works through the
   # [tasknote] annotation prefix
   $SHELL -c "$TASKBIN $* denotate \"[tasknote]\""
   $SHELL -c "$TASKBIN $* annotate '$NOTEMSG'"
+else
+  [ -f $file ] && $SHELL -c "rm $file"
 fi
 
 exit 0
