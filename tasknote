@@ -103,7 +103,8 @@ $SHELL -c "$EDITOR $file"
 # Create a note message representing the first line of
 # the edited note file.
 if [ -f $file ]; then
-  NOTEMSG="[tasknote] `head -1 $file`"
+  # build the note message protecting single quotes
+  NOTEMSG="[tasknote] $( head -1 $file | sed -e "s,','\"'\"',g" )"
   # remove any previous annotation - we want only a single
   # tasknote annotation. Detection works through the
   # [tasknote] annotation prefix
