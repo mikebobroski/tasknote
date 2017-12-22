@@ -78,6 +78,8 @@ fi
 uuid=`$TASKBIN $1 uuids`
 
 # build full path & file name to store notes in
+#  ensure FOLDER ends with a slash
+[ "${FOLDER: -1}" != "/" ] && FOLDER=$FOLDER/
 file="$FOLDER$uuid$EXT"
 
 # determine if notes file already exists
