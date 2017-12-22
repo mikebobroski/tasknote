@@ -68,10 +68,11 @@ NOTEMSG="See Notes File"
 
 # Display usage if task number not supplied on cli
 if [ $# -lt 1 -o $# -gt 2 ]; then
-	echo "Usage:"
-   	echo "  New/Edit note: $0 <id>"
-	echo "  View note:     $0 <id> v"
-	exit 1
+  echo "Usage:"
+  echo "  New/Edit note: $0 <id>"
+  echo "  View note:     $0 <id> v"
+  echo "  Delete note:   $0 <id> d"
+  exit 1
 fi
 
 #find UUID from given task
@@ -87,14 +88,23 @@ if [ -f $file ]; then
   fileexists=1
 fi
 
-# Display note if requested and exit
+# Display/remove note if requested and exit
 if [ $# -gt 1 ]; then
-	if [ $fileexists = 1 ]; then
-		$SHELL -c "$VIEWER $file"
-	else
-		echo "File not found"
-	fi
-	exit 1
+  if [ $fileexists = 1 ]; then
+      action=$2
+      case $action in
+          v)
+              $SHELL -c "$VIEWER $file"
+              ;;
+          d)
+              $SHELL -c "rm $file"
+              $SHELL -c "$TASKBIN $1 denotate \"[tasknote]\""
+              ;;
+      esac
+  else
+    echo "File not found"
+  fi
+  exit 1
 fi
 
 #create/edit $file with editor
